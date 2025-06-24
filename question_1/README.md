@@ -169,6 +169,6 @@ make run_dev         # Start the FastAPI app
 make migrations     # Run Alembic migration files
 make upgrade        # Upgrade Alembic migration
 make downgrade      # Downgrade Alembic migration
-shell               # Start an interactive shell (IPython)
-test                # Run tests with pytest
+make shell          # Start an interactive shell (IPython)
+make test_all       # Run tests with pytest
 ```
