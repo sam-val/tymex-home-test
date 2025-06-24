@@ -10,7 +10,9 @@ the actual code to send the notification through those channels
 
 # 📬 Notification Module
 
-A Python module for sending notifications based on user preferences. Supports multiple channels including **Email** and **SMS**, and selects the appropriate one(s) based on user settings.
+A Python module for sending notifications based on user preferences.
+- [Supports multiple channels including **Email** and **SMS**](#-multi-channel-support)
+- [Selects the appropriate one(s) based on user settings](#-user-preference-handling)
 
 > **Note:** Actual integration with Email/SMS providers is abstracted.
 
