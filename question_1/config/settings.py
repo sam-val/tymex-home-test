@@ -6,6 +6,7 @@ from typing import Any, List, Optional
 from pydantic import Field, PostgresDsn, field_validator
 from pydantic_core.core_schema import ValidationInfo
 from pydantic_settings import BaseSettings, SettingsConfigDict
+import test
 
 
 class ModeEnum(str, Enum):
@@ -28,8 +29,8 @@ class Settings(BaseSettings):
     MODE: ModeEnum = ModeEnum.dev
 
     # database
-    ASYNC_SQLITE_URI: Optional[str] = "sqlite+aiosqlite:///./test.db"
-    ASYNC_UNITEST_SQLITE_URI: Optional[str] = "sqlite+aiosqlite:///./unittest.db"
+    ASYNC_SQLITE_URI: Optional[str] = ""
+
     # parts of async DB URI
     DATABASE_USER: str
     DATABASE_PASSWORD: str
@@ -72,8 +73,6 @@ class Settings(BaseSettings):
         if isinstance(v, str):
             if v == "":
                 mode = info.data.get("MODE")
-                print("mode: ", mode)
-                print(info.data)
                 if mode == ModeEnum.testing:
                     return PostgresDsn.build(
                         scheme="postgresql+asyncpg",
@@ -92,6 +91,18 @@ class Settings(BaseSettings):
                     port=info.data["DATABASE_PORT"],
                     path=info.data["DATABASE_NAME"],
                 )
+        return v
+
+    @field_validator("ASYNC_SQLITE_URI", mode="after")
+    def assemble_test_db(cls, v: str | None, info: ValidationInfo) -> Any:
+        # we uses 2 testing db, one for dev one for unittest
+        mode = info.data.get("MODE")
+        if v == "":
+            if mode == ModeEnum.testing:
+                return "sqlite+aiosqlite:///./unittest.db"
+            
+            return "sqlite+aiosqlite:///./test.db"
+
         return v
 
     model_config = SettingsConfigDict(
