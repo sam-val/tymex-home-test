@@ -8,94 +8,121 @@ Assumption: Email and SMS provider will be available via 3rd party providers so 
 the actual code to send the notification through those channels
 ```
 
-# Notification Module 
+# 📬 Notification Module
 
-Python module (not api related) to satisfy the requirements:
+A Python module for sending notifications based on user preferences. Supports multiple channels including **Email** and **SMS**, and selects the appropriate one(s) based on user settings.
 
-1. [Support multiple notification channels including Email and SMS](#multi-channel-senders-support)
-2. [Select the appropriate notification channel based on user preferences like if user enable Email as their notification option, use Email](#handle-multiple-options)
+> **Note:** Actual integration with Email/SMS providers is abstracted.
+
+---
+
+## ✅ Features
+
+1. **Multi-channel notification support** (Email, SMS, etc.)
+2. **User-configurable notification preferences**
+3. Easily extensible for new channels
+
+---
+
 ## 📚 Table of Contents
 
-- [️🚀 Quick Start](#️-quick-start)
-- [🧪️ Running Tests](#run-tests)
-- [🛠️ Multi-channel Support](#multi-channel-senders-support)
-- [👤 Multiple User Options](#handle-multiple-options)
+* [🚀 Quick Start](#-quick-start)
+* [🧪 Running Tests](#-running-tests)
+* [📱 Multi-channel Support](#-multi-channel-support)
+* [👤 User Preference Handling](#-user-preference-handling)
 
-## 🛠️ Quick Start
+---
+
+## 🚀 Quick Start
+
 ### 🔧 Prerequisites
-- Python 3.13
-- Poetry
-- make (for Makefile support)
 
-### 🔧 Install Poetry
+* Python `3.13`
+* [`Poetry`](https://python-poetry.org/docs/#installation)
+* `make` (for Makefile support)
 
-If you don't have Poetry, install it using the [official instructions](https://python-poetry.org/docs/#installation). For most systems, this works:
+### 📦 Installation
 
-**MacOS/Linux:**
+1. Install Poetry:
+
+   ```bash
+   curl -sSL https://install.python-poetry.org | python3.13 -
+   ```
+
+   Add to your shell profile (`~/.zshrc`, `~/.bashrc`, etc.):
+
+   ```bash
+   export PATH="$HOME/.local/bin:$PATH"
+   ```
+
+   Then restart your shell and check:
+
+   ```bash
+   poetry --version
+   ```
+
+2. Setup project environment:
+
+   ```bash
+   poetry env use python3.13
+   poetry install
+   ```
+
+---
+
+## 🧪 Running Tests
+
+Test cases are located in `tests/test_notification.py`.
 
 ```bash
-curl -sSL https://install.python-poetry.org | python3.13 -
+make test_all  # via Makefile
+# or directly
+poetry run pytest -q -rx .
 ```
 
-You may need to restart your shell or manually add Poetry to your PATH. Add the following to your .bashrc, .zshrc, or equivalent:
+---
 
-```bash
-export PATH="$HOME/.local/bin:$PATH"
-```
+## 📱 Multi-channel Support
 
-Then restart your terminal and verify it works:
+Notification channels are defined in:
 
-```bash
-poetry --version
-```
+* `notif/senders.py` – contains the logic to send via Email, SMS, etc.
+* `notif/constants.py` – defines the supported channel constants (e.g. `EMAIL`, `SMS`)
 
-### 🔧 Init dependencies 
-```bash
-# at root dir
-poetry env use python3.13
-poetry install
-```
+### Example usage:
 
-## Run Tests
-
-Tests are at: `tests/test_notification.py`
-
-```bash
-make test_all # (with make)
-# or
-poetry run poetry run pytest -q -rx .
-```
-
-## Multi-channel (senders) support
-
-Channels/Senders are defined in `notif/senders.py`
-
-Constants for channels are setup in `notif/constants.py`
-
-If user has multiple perferred channels, we can setup like:
 ```python
-pref = UserPreference(
-    user_id=user_id,
+from notif.notification import Notifier, NotificationChannel, UserPreference
+
+user_pref = UserPreference(
+    user_id="user123",
     preferred_channels=[NotificationChannel.EMAIL, NotificationChannel.SMS],
 )
-```
-And use it with `Notifier` class to send the notif
-```python
+
 notifier = Notifier()
-notifier.notify(pref, message)
+notifier.notify(user_pref, "Hello, this is a test message!")
 ```
 
-## Handle multiple options 
-For their enable notif options, we can get their options (probably stored on a persistence layer)
+---
 
-And pass it into this module, something like:
+## 👤 User Preference Handling
+
+User preferences (i.e. enabled notification channels) should be loaded from your persistence layer (database, config, etc.):
+
 ```python
-preferred_channels = db.get_preferred_channels()  # hit db 
+preferred_channels = db.get_preferred_channels(user_id)
 
-pref = UserPreference(
+user_pref = UserPreference(
     user_id=user_id,
     preferred_channels=preferred_channels,
 )
 ```
 
-If they disable all notif options, this won't run. This module allows flexbility for users choices.
+If the user has disabled all notification options, the notifier will **gracefully skip** sending.
+
+---
+
+## 📌 Notes
+
+* This module does **not** handle actual delivery to third-party services (e.g., Twilio, SendGrid).
+* Designed to be easily integrated with FastAPI, Django, or CLI tools.
