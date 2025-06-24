@@ -69,6 +69,7 @@ poetry --version
 ### 🔧 Init dependencies 
 ```bash
 # at root dir
+poetry env use python3.13
 poetry install --no-root
 ```
 
