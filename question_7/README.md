@@ -2,7 +2,7 @@
 
 ## 📚 Table of Contents
 
-- [❗ Problems & Introduction](#introduction)
+- [❗ Introduction](#introduction)
 - [🧰 Techstack](#️-tech-stack)
 - [🗺️ High-Level Diagram](#high-level-diagram)
 - [🧩 Main APIs](#main-apis)
@@ -15,7 +15,9 @@
 - [🛡️ Fault Tolerance & Graceful Degradation](#fault-tolerance-and-graceful-degradation)
 
 
-## Problems & Introduction
+## Introduction
+
+### Problem
 
 ```
 You are tasked with designing a notification system for a large-scale application. The system needs to
@@ -31,7 +33,7 @@ Let's try to solve each of the requirements, **you can click on each requirement
 1. [Support multiple notification channels](#multi-channel-support-email-sms-push-in-app)
 2. [Implement priority levels for notifications (e.g., critical, high, medium, low)](#primary-notification-topics-by-priority)
 3. [Allow users to set preferences for notification channels based on notification types](#update-preferences-api)
-4. [Support throttling and rate limiting to prevent notification spam](#)
+4. [Support throttling and rate limiting to prevent notification spam](#rate-limiting)
 5. [Provide delivery status tracking (sent, delivered, failed, read)](#delivery-status-tracking)
 6. [Handle notification retries for failed deliveries with configurable retry policies](#retry-kafka-topics-by-channel--delay-tier)
 
@@ -62,7 +64,10 @@ Let's try to solve each of the requirements, **you can click on each requirement
 
 ## High Level Diagram
 
-## 🛠️ Main APIs 
+![high level diagram](https://github.com/user-attachments/assets/4c67e4a6-732c-4d6d-9b5b-dbf254528f93)
+
+
+## Main APIs 
 
 ### Make notification
 
@@ -206,7 +211,6 @@ Example:
   },
   "other_settings": {
     "throttle_per_user_per_minute": 5,
-    ...
   }
 }
 ```
