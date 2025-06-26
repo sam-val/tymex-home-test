@@ -29,6 +29,7 @@ A async fastapi server that fulfills 5 of the above requirements:
 - [🛠️ Quick Start](#️-quick-start)
 - [🛠️ API](#️-endpoints)
 - [⚙️ Makefile Commands](#️-makefile-commands)
+- [🧪 Unit Testing](#-unit-testing)
 
 ## ✨ Features
 
@@ -159,7 +160,6 @@ class IdempotencyKey(SQLModel, table=True):
     )
 ```
 
-
 ## ⚙️ Makefile Commands (extra)
 
 Use `make <command>` to run common development tasks:
@@ -171,4 +171,14 @@ make upgrade        # Upgrade Alembic migration
 make downgrade      # Downgrade Alembic migration
 make shell          # Start an interactive shell (IPython)
 make test_all       # Run tests with pytest
+```
+
+## 🧪 Unit Testing
+
+Run tests with command:
+
+```bash
+make test_all
+# or
+poetry run pytest -q -rx .
 ```
