@@ -79,7 +79,8 @@ Then restart your terminal and verify it works:
 poetry --version
 ```
 
-### 🔧 Init dependencies 
+### 🔧 Init dependencies
+
 ```bash
 # at root dir
 poetry env use python3.13
@@ -88,7 +89,13 @@ poetry install --no-root
 
 ### Run Server
 
-Start the local server with:
+Make migrations (I use SQlite for this exercise for quick setup)
+
+```bash
+make upgrade
+```
+
+Then start the local server with:
 
 ```bash
 make run_dev # (with make)
