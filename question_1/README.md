@@ -175,7 +175,9 @@ make test_all       # Run tests with pytest
 
 ## 🧪 Unit Testing
 
-Run tests with command:
+Tests are located in `apps/payments/tests/api/test_api_v1.py`
+
+You can run tests with command:
 
 ```bash
 make test_all
