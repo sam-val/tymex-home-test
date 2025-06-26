@@ -34,7 +34,7 @@ class TestPaymentV1:
             response_data="response",
         )
         repo = IdempotencyKeyRepo(session=db_session)
-        key = await repo.create(obj_in=obj_in)
+        await repo.create(obj_in=obj_in)
 
         async with AsyncClient(transport= ASGITransport(app), base_url="http://test") as ac:
             res = await ac.post("/api/payment/v1/payments", json={
