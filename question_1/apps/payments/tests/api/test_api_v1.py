@@ -41,7 +41,7 @@ class TestPaymentV1:
                 "request_data": "request_data",
                 "idempotency_id": "1"
             })
-            assert res.status_code == 201
+            assert res.status_code == 200  # not 201 since do not create new resource
             assert type(res.json()["data"]["response_data"]) == str 
             assert res.json()["data"]["response_data"] is not None
 

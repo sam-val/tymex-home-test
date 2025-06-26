@@ -3,7 +3,7 @@ Business rules for writing operations, uses repo
 """
 
 from datetime import datetime
-import factory
+from typing import Tuple
 import faker
 
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -38,23 +38,30 @@ class PaymenTransactionService:
     async def process_payment(
         self,
         payload: PaymentTransactionCreate,
-    ) -> PaymentTransactionRead:
+    ) -> Tuple[bool, PaymentTransactionRead]:
         """
         Try to find record with itempotency
         If exists and not expire yet, return existing response
         else process and return response
+
+        Returns is_created, read_data
         """
+
+        is_created = False
 
         idempotency_data = await self.repo.get_by_idempotency_id(
             idempotency_id=payload.idempotency_id,
         )
 
         if idempotency_data and not self.is_expired(idempotency_data.expires_at):
-            return idempotency_data
+            return is_created, idempotency_data
 
+        # make new data
         response_data = self.calculate_response()
-        print("response data: ", response_data)
-        return await self.repo.store_request_data(
+        new_idempotency_data = await self.repo.store_request_data(
             payload=payload,
             response_data=response_data,
         )
+
+        is_created = True
+        return is_created, new_idempotency_data 

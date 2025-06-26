@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Depends, status
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Depends, status, Response
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from apps.payments.schemas.payment_schema import PaymentTransactionCreate, PaymentTransactionRead
@@ -17,12 +16,17 @@ router = APIRouter()
 )
 async def process_payment(
     payload: PaymentTransactionCreate,
+    response: Response,
     session: AsyncSession = Depends(get_session),
 ):
     service = PaymenTransactionService(session=session)
-    data = await service.process_payment(
+    is_created, data = await service.process_payment(
         payload=payload,
     )
+
+    if not is_created:
+        response.status_code = status.HTTP_200_OK
+
     return StandardResponse(
         data=data,
     )
