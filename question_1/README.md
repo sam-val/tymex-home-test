@@ -11,17 +11,31 @@ Your implementation should:
 5. Set appropriate expiration for stored idempotency keys
 ```
 
-# Async FastAPI Server
+# 🚀 Async FastAPI Server with Idempotency Support
 
-A async fastapi server that fulfills 5 of the above requirements:
+An async FastAPI server that handles payment transaction requests with proper **idempotency**, **concurrent-safe** logic, and **expirable request-response storage**.
 
-1. [API accepts itempotency_id](#️-endpoints)
-2. [Store the request and response in table](#model)
-3. [Return the payment transaction response when the same idempotency key is reused](#️-endpoints)
-4. [Handle concurrent requests with the same idempotency key correctly](#handling-of-concurrency-requirement-4)
-5. [Set appropriate expiration for stored idempotency keys](#expired-idempotency)
+> 💡 Built with a modular architecture using a template based on [fastapi-django-like-template (my own repo)](https://github.com/sam-val/fastapi-django-like-template)
 
-*repo uses a template from [another repo of mine](https://github.com/sam-val/fastapi-django-like-template)
+---
+
+## ✅ Requirements Fulfilled
+
+### 1. [API accepts `idempotency_id`](#️-endpoints)
+The `/api/payment/v1/payments` endpoint accepts an `idempotency_id` in the request body to ensure the same request isn’t processed twice.
+
+### 2. [Stores request and response in a table](#model)
+Incoming requests and generated responses are stored in a dedicated `IdempotencyKey` table.
+
+### 3. [Returns cached response on repeated calls](#️-endpoints)
+If a request is made again with the same `idempotency_id`, the server returns the **original** response instead of processing it again.
+
+### 4. [Handles concurrent requests with the same idempotency key](#handling-of-concurrency-requirement-4)
+Are handled by model constraints. 
+
+### 5. [Sets expiration for stored idempotency keys](#expired-idempotency)
+Keys older than a configured TTL (e.g., 24 hours) are treated as expired and new requests will overwrite them.
+
 
 ## 📚 Table of Contents
 

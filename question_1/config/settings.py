@@ -31,13 +31,6 @@ class Settings(BaseSettings):
     # database
     ASYNC_SQLITE_URI: Optional[str] = ""
 
-    # parts of async DB URI
-    DATABASE_USER: str
-    DATABASE_PASSWORD: str
-    DATABASE_HOST: str
-    DATABASE_PORT: int
-    DATABASE_NAME: str
-
     # test db
     TEST_DATABASE_USER: Optional[str] = None
     TEST_DATABASE_PASSWORD: Optional[str] = None
@@ -53,45 +46,6 @@ class Settings(BaseSettings):
 
     # Add more custom settings as needed
     # e.g. rate_limit_per_minute: int = 30
-
-    @field_validator("DATABASE_URI", mode="after")
-    def assemble_sync_db(cls, v: str | None, info: ValidationInfo) -> Any:
-        if isinstance(v, str):
-            if v == "":
-                return PostgresDsn.build(
-                    scheme="postgresql",
-                    username=info.data["DATABASE_USER"],
-                    password=info.data["DATABASE_PASSWORD"],
-                    host=info.data["DATABASE_HOST"],
-                    port=info.data["DATABASE_PORT"],
-                    path=info.data["DATABASE_NAME"],
-                )
-        return v
-
-    @field_validator("ASYNC_DATABASE_URI", mode="after")
-    def assemble_async_db(cls, v: str | None, info: ValidationInfo) -> Any:
-        if isinstance(v, str):
-            if v == "":
-                mode = info.data.get("MODE")
-                if mode == ModeEnum.testing:
-                    return PostgresDsn.build(
-                        scheme="postgresql+asyncpg",
-                        username=info.data["TEST_DATABASE_USER"],
-                        password=info.data["TEST_DATABASE_PASSWORD"],
-                        host=info.data["TEST_DATABASE_HOST"],
-                        port=info.data["TEST_DATABASE_PORT"],
-                        path=info.data["TEST_DATABASE_NAME"],
-                    )
-
-                return PostgresDsn.build(
-                    scheme="postgresql+asyncpg",
-                    username=info.data["DATABASE_USER"],
-                    password=info.data["DATABASE_PASSWORD"],
-                    host=info.data["DATABASE_HOST"],
-                    port=info.data["DATABASE_PORT"],
-                    path=info.data["DATABASE_NAME"],
-                )
-        return v
 
     @field_validator("ASYNC_SQLITE_URI", mode="after")
     def assemble_test_db(cls, v: str | None, info: ValidationInfo) -> Any:

@@ -5,7 +5,6 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel import SQLModel
 
 from alembic import context
-from apps.example.models import *
 from apps.payments.models import *
 from config.settings import get_settings
 
