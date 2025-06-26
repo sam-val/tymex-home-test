@@ -89,7 +89,7 @@ poetry install --no-root
 
 ### Run Server
 
-Make migrations (I use SQlite for this exercise for quick setup)
+Make migrations (I use SQlite for this exercise for quick setup, db path: `test.db`)
 
 ```bash
 make upgrade
