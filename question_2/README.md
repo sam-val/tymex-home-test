@@ -45,7 +45,7 @@ A Python module for sending notifications based on user preferences.
 
 ### 📦 Installation
 
-1. Install Poetry:
+#### 1. Install Poetry (if you haven't installed, otherwise skip to 2):
 
    ```bash
    curl -sSL https://install.python-poetry.org | python3.13 -
@@ -63,7 +63,7 @@ A Python module for sending notifications based on user preferences.
    poetry --version
    ```
 
-2. Setup project environment:
+#### 2. Setup project environment:
 
    ```bash
    poetry env use python3.13
