@@ -11,9 +11,7 @@ Your implementation should:
 5. Set appropriate expiration for stored idempotency keys
 ```
 
-# 🚀 Async FastAPI Server with Idempotency Support
-
-An async FastAPI server that handles payment transaction requests with proper **idempotency**, **concurrent-safe** logic, and **expirable request-response storage**.
+# 🚀 Async FastAPI Server
 
 > 💡 Built with a modular architecture using a template based on [fastapi-django-like-template (my own repo)](https://github.com/sam-val/fastapi-django-like-template)
 
